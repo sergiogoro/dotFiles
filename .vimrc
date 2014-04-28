@@ -1,3 +1,6 @@
+set nocompatible  "Use Vim settings, rather then Vi settings (much better!). This must be first, because it changes other options as a side effect.
+
+
 " ================ Vundle Config ====================
 
 " set the runtime path to include Vundle and initialize
@@ -30,9 +33,6 @@ Bundle 'FuzzyFinder'
 
 Bundle 'Tagbar'
 
-
-filetype plugin indent on     " required
-"
 " Brief help
 " :BundleList          - list configured bundles
 " :BundleInstall(!)    - install (update) bundles
@@ -44,12 +44,10 @@ filetype plugin indent on     " required
 
 " ================ End of Vundle Config ====================
 
+" ================ Macros ====================
+runtime macros/matchit.vim  "Enable extended % matching. The % key will switch between opening and closing brackets
 
-"Use Vim settings, rather then Vi settings (much better!).
-" This must be first, because it changes other options as a side effect.
-set nocompatible
-
-" Aspect settings
+" ================ Aspect ====================
 set background=dark
 
 " ================ General Config ====================
@@ -59,16 +57,14 @@ set showmode                    "Show current mode down the bottom
 set gcr=a:blinkon0              "Disable cursor blink
 set visualbell                  "No sounds
 " set autoread                    "Reload files changed outside vim
-
 syntax on   "Turn on syntax highlighting
-
 
 " ================ Search Settings  =================
 
 set incsearch        "Find the next match as we type the search
 set hlsearch         "Hilight searches by default
 set viminfo='100,f1  "Save up to 100 marks, enable capital marks
-
+set ignorecase  "Searches ignoring case
 
 " ================ Persistent Undo ==================
 " Keep undo history across sessions, by storing in file.
@@ -79,25 +75,51 @@ set viminfo='100,f1  "Save up to 100 marks, enable capital marks
 
 
 " ================ Indentation ======================
+" === Considerations ===
+" Using a 'tabstop' value other than the default (8 spaces), will result in
+" your file having a different appearance when using tools such as cat (type
+" on Windows), which can't use a custom width tab character. On the other
+" hand, using hard tabs for indentation, allows others to view your code with
+" the amount of indentation they prefer. Which of these considerations should
+" have priority, is a matter of personal preference (and company policy).
 
-set autoindent
-set smartindent
-set smarttab
-"set shiftwidth=4
-"set softtabstop=4
-"set tabstop=4
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
-set expandtab
+" == Indents
+filetype plugin indent on
+filetype on
+filetype indent on
 
-" filetype plugin indent on
-" filetype on
-" filetype indent on
+set autoindent  "When pressing enter, cursor goes below aligned with the start of the upper line
+                "Does nothing more than copy the indentation from the previous
+                " line, when starting a new line. It can be useful for
+                " structured text files, or when you want to control most of
+                " the indentation manually, without Vim interfering.
+set smartindent "Automatically inserts one extra level of indentation in some cases, and works for C-like files
 
-" Display tabs and trailing spaces visually
-set list listchars=tab:\ \ ,trail:·
+" == Tabs
+set list listchars=tab:\ \ ,trail:· " Display tabs and trailing spaces visually
 
+set smarttab      "Affects how <TAB> key presses are interpreted depending on where the cursor is.
+                  "If 'smarttab' is on, a <TAB> key inserts indentation according to 'shiftwidth' at
+                  " the beginning of the line, whereas 'tabstop' and 'softtabstop' are used elsewhere.
+                  " There is seldom any need to set this option, unless it is necessary to use hard TAB characters in body text or code.
+
+set shiftwidth=2  "Affects what happens when you press >>, << or ==. It also affects how automatic indentation works
+
+set softtabstop=2 "Affects what happens when you press the <TAB> or <BS> keys. Its default value is the same as the value
+                  " of 'tabstop', but when using indentation without hard tabs or mixed indentation, you want to set it tothe same value
+                  " as 'shiftwidth'. If 'expandtab' is unset, and 'tabstop' is different from 'softtabstop', the <TAB> key
+                  " will minimize the amount of spaces inserted by using multiples of TAB characters. For instance, if 'tabstop' is 8, and
+                  " the amount of consecutive space inserted is 20, two TAB characters and four spaces will be used
+
+set tabstop=2   "Changes the width of the TAB character, plain and simple
+
+set expandtab   "Changes tabs for spaces
+                "Affects what happens when you press the <TAB> key. If 'expandtab' is set, pressing the <TAB> key will always insert
+                " 'softtabstop' amount of space characters. Otherwise, the amount of spaces inserted is minimized by using TAB characters
+
+"set ts=2  "One tab = 2 spaces
+
+" == Lines
 set nowrap       "Don't wrap lines
 set linebreak    "Wrap lines at convenient points
 
@@ -112,7 +134,6 @@ set nofoldenable        "dont fold by default
 set wildmode=list:longest
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
 
-
 " ================ Scrolling ========================
 
 set scrolloff=2         "Start scrolling when we're 3 lines away from margins
@@ -126,14 +147,9 @@ set title
 
 set clipboard=unnamed
 
-
-
-" ==============================================
-" ==============================================
-" ==============================================
-
-
-
+nnoremap <F2> :set invpaste paste?<CR>
+set pastetoggle=<F2>
+set showmode
 
 
 " ================ Sergio Old Config ====================
